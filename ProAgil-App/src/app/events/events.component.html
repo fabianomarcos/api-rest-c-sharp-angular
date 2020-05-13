@@ -1,12 +1,23 @@
-<form class="form-inline">
+<div class="form-inline">
   <div class="form-group mb-2">
-    <input type="text" class="form-control mr-2" placeholder="buscar">
-  <button class="btn btn-outline-success">Buscar</button>
+    <label class="mr-2">Filtro por Tema:</label>
+    <input
+      type="text"
+      class="form-control mr-2"
+      placeholder="buscar"
+      [(ngModel)]="filterList"
+    />
+    <button class="btn btn-outline-success">Buscar</button>
   </div>
-</form>
+</div>
 <table class="table table-striped">
   <thead class="tread-dark">
     <tr>
+      <th>
+        <button (click)="setShowImage()" class="btn btn-outline-default">
+          Mostrar imagem
+        </button>
+      </th>
       <th>#</th>
       <th>Tema</th>
       <th>Local</th>
@@ -17,13 +28,20 @@
     </tr>
   </thead>
   <tbody *ngIf="events && events.length">
-    <tr *ngFor="let event of events">
-      <td>{{event.eventId}}</td>
-      <td>{{event.theme}}</td>
-      <td>{{event.locale}}</td>
-      <td>{{event.dateEvent}}</td>
-      <td>{{event.amountPeoples}}</td>
-      <td>{{event.lot}}</td>
+    <tr *ngFor="let event of eventsFiltered">
+      <td>
+        <img
+          src="http://localhost:5000/img/{{ event.ImageUrl }}"
+          [style.widht.px]="imageHeight"
+          [style.margin.px]="imageMargim"
+        />
+      </td>
+      <td>{{ event.eventId }}</td>
+      <td>{{ event.theme }}</td>
+      <td>{{ event.locale }}</td>
+      <td>{{ event.dateEvent }}</td>
+      <td>{{ event.amountPeoples }}</td>
+      <td>{{ event.lot | uppercase }}</td>
       <td>
         <button class="btn btn-success"></button>
         <button class="btn btn-danger"></button>
