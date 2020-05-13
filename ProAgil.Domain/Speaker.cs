@@ -8,8 +8,8 @@ namespace ProAgil.Domain
         public string ImageUrl { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        
+
         public List<SocialNetwork> SocialNetwork { get; set; }
-        public List<SpeakerEvent> SpeakerEvent { get; set; }
+        public List<EventSpeaker> EventSpeakers { get; set; }
     }
 }
