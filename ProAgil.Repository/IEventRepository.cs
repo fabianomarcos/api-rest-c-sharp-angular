@@ -3,7 +3,7 @@ using ProAgil.Domain;
 
 namespace ProAgil.Repository
 {
-    public interface IEvent
+    public interface IEventRepository
     {
         Task<Event[]> GetAllEventsAsyncByThema(string thema, bool includeSpeakers);
         Task<Event[]> GetAllEventsAsync(bool includeSpeakers);

@@ -5,7 +5,7 @@ using ProAgil.Domain;
 
 namespace ProAgil.Repository
 {
-    public class SpeakerRepository : ISpeaker
+    public class SpeakerRepository : ISpeakerRepository
     {
         public readonly ProAgilContext _context;
 

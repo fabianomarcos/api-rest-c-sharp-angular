@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
-  styleUrls: ['./events.component.css']
+  styleUrls: ['./events.component.css'],
 })
 export class EventsComponent implements OnInit {
   events: any = [];
@@ -26,7 +26,7 @@ export class EventsComponent implements OnInit {
       : this.events;
   }
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
   ngOnInit() {
     this.getEvents();
@@ -34,8 +34,8 @@ export class EventsComponent implements OnInit {
 
   filterEvents(name: string): any {
     name = name.toLowerCase();
-    return this.events.filter( event =>
-      event.theme.toLowerCase().indexOf(name) !== -1
+    return this.events.filter(
+      (event) => event.theme.toLowerCase().indexOf(name) !== -1
     );
   }
 
@@ -44,11 +44,13 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.httpClient.get('http://localhost:5000/api/values').subscribe(response => {
-      this.events = response;
-    },
-    error => {
-      console.log(error);
-    });
+    this.httpClient.get('http://localhost:5000/api/values').subscribe(
+      (response) => {
+        this.events = response;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 }

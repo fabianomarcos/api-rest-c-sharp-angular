@@ -6,13 +6,14 @@ using ProAgil.Domain;
 
 namespace ProAgil.Repository
 {
-    public class EventRepository : IEvent
+    public class EventRepository : IEventRepository
     {
         public readonly ProAgilContext _context;
         public EventRepository(ProAgilContext context)
         {
             _context = context;
         }
+
         public async Task<Event[]> GetAllEventsAsync(bool includeSpeakers)
         {
 

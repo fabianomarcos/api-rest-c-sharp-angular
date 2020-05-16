@@ -3,7 +3,7 @@ using ProAgil.Domain;
 
 namespace ProAgil.Repository
 {
-    public interface ISpeaker
+    public interface ISpeakerRepository
     {
         Task<Speaker[]> GetAllSpeakersAsyncByName(string name, bool includeEvent);
         Task<Speaker> GetSpeakerAsyncById(int SpeakerID, bool includeEvent);
