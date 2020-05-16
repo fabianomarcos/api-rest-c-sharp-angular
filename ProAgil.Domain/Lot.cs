@@ -11,6 +11,6 @@ namespace ProAgil.Domain
         public DateTime? FinalDate { get; set; }
         public int amount { get; set; }
         public int EventId { get; set; }
-        public Event Event { get; set; }
+        public Event Event { get; }
     }
 }

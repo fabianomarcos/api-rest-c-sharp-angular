@@ -14,7 +14,15 @@ namespace ProAgil.Repository
             _context = context;
         }
 
-        public async Task<Speaker[]> GetAllSpeakersAsyncByName(string name, bool includeEvent = false)
+        public async Task<Speaker[]> GetAllSpeakersAsync(bool includeEvent = false)
+        {
+            IQueryable<Speaker> query = _context.Speakers;
+
+            query = query.OrderBy(speaker => speaker.Name);
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Speaker[]> GetSpeakersAsyncByName(string name, bool includeEvent = false)
         {
             IQueryable<Speaker> query = _context.Speakers
                 .Include(c => c.SocialNetwork);

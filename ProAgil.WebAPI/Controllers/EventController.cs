@@ -6,7 +6,7 @@ using ProAgil.Repository;
 
 namespace ProAgil.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -85,6 +85,7 @@ namespace ProAgil.WebAPI.Controllers
             try
             {
                 var response = await _repository.GetEventAsyncById(EventId, false);
+
                 if (response == null) return NotFound();
 
                 _repositoryBase.Update(eventModel);

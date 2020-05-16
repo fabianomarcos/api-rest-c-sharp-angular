@@ -13,7 +13,6 @@ namespace ProAgil.Domain
         public string ImageUrl { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public string Lot { get; set; }
 
         public List<Lot> Lots { get; set; }
         public List<SocialNetwork> SocialNetworks { get; set; }
