@@ -38,7 +38,7 @@ namespace ProAgil.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<Speaker> GetSpeakerAsyncById(int SpeakerID, bool includeEvent = false)
+        public async Task<Speaker> GetSpeakerAsyncById(int SpeakerId, bool includeEvent = false)
         {
             IQueryable<Speaker> query = _context.Speakers
                 .Include(s => s.SocialNetwork);
@@ -50,7 +50,7 @@ namespace ProAgil.Repository
                     .ThenInclude(e => e.Event);
             }
 
-            query = query.Where(s => s.Id == SpeakerID);
+            query = query.Where(s => s.Id == SpeakerId);
             return await query.FirstOrDefaultAsync();
         }
     }

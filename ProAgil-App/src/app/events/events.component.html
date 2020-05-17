@@ -1,13 +1,10 @@
 <div class="form-inline">
   <div class="form-group mb-2">
     <label class="mr-2">Filtro por Tema:</label>
-    <input
-      type="text"
-      class="form-control mr-2"
-      placeholder="buscar"
-      [(ngModel)]="filterList"
-    />
-    <button class="btn btn-outline-success">Buscar</button>
+    <input type="text" class="form-control mr-2" placeholder="buscar" (ngModel)="filterList" />
+    <button class="btn btn-outline-success" (click)="filterEvents(filterList)">
+      Buscar
+    </button>
   </div>
 </div>
 <table class="table table-striped">
@@ -30,11 +27,8 @@
   <tbody *ngIf="events && events.length">
     <tr *ngFor="let event of eventsFiltered">
       <td>
-        <img
-          src="http://localhost:5000/img/{{ event.ImageUrl }}"
-          [style.widht.px]="imageHeight"
-          [style.margin.px]="imageMargim"
-        />
+        <img src="http://localhost:5000/img/{{ event.ImageUrl }}" [style.widht.px]="imageHeight"
+          [style.margin.px]="imageMargim" />
       </td>
       <td>{{ event.eventId }}</td>
       <td>{{ event.theme }}</td>

@@ -6,7 +6,7 @@ using ProAgil.Domain;
 
 namespace ProAgil.WebAPI.Controllers
 {
-    [Route("[controller")]
+    [Route("[controller]")]
     [ApiController]
     public class SpeakerController : ControllerBase
     {

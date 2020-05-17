@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { EventService } from '../services/event.service';
 
 @Component({
   selector: 'app-events',
@@ -15,6 +15,13 @@ export class EventsComponent implements OnInit {
 
   // tslint:disable-next-line: variable-name
   _filterList: string;
+
+  constructor(private eventService: EventService) {}
+
+  ngOnInit() {
+    this.getEvents();
+  }
+
   get filterList(): string {
     return this._filterList;
   }
@@ -24,12 +31,6 @@ export class EventsComponent implements OnInit {
     this.eventsFiltered = this.filterList
       ? this.filterEvents(this.filterList)
       : this.events;
-  }
-
-  constructor(private httpClient: HttpClient) {}
-
-  ngOnInit() {
-    this.getEvents();
   }
 
   filterEvents(name: string): any {
@@ -44,9 +45,10 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.httpClient.get('http://localhost:5000/api/values').subscribe(
+    this.eventService.getResources().subscribe(
       (response) => {
         this.events = response;
+        this.eventsFiltered = this.events;
       },
       (error) => {
         console.log(error);
