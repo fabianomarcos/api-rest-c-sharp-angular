@@ -13,7 +13,7 @@ export abstract class BaseResourceService<T extends BaseResourceModel> {
     this.http = injector.get(HttpClient);
   }
 
-  getResources(): Observable<T[]> {
+  getAllResources(): Observable<T[]> {
     return this.http
       .get<T[]>(this.apiPath)
       .pipe(map(this.jsonDataToResources), catchError(this.handleError));

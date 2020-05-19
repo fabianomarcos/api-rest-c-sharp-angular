@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../services/event.service';
+import { EventModel } from '../models/_models/EventModel';
 
 @Component({
   selector: 'app-events',
@@ -7,8 +8,8 @@ import { EventService } from '../services/event.service';
   styleUrls: ['./events.component.css'],
 })
 export class EventsComponent implements OnInit {
-  events: any = [];
-  eventsFiltered: any = [];
+  events: EventModel[];
+  eventsFiltered: EventModel[];
   imageHeight = 50;
   imageMargim = 2;
   showImage = false;
@@ -33,7 +34,7 @@ export class EventsComponent implements OnInit {
       : this.events;
   }
 
-  filterEvents(name: string): any {
+  filterEvents(name: string): EventModel[] {
     name = name.toLowerCase();
     return this.events.filter(
       (event) => event.theme.toLowerCase().indexOf(name) !== -1
@@ -45,9 +46,9 @@ export class EventsComponent implements OnInit {
   }
 
   getEvents() {
-    this.eventService.getResources().subscribe(
-      (response) => {
-        this.events = response;
+    this.eventService.getAllResources().subscribe(
+      (events: EventModel[]) => {
+        this.events = events;
         this.eventsFiltered = this.events;
       },
       (error) => {

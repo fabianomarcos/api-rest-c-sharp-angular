@@ -7,7 +7,7 @@ export class Event extends BaseResourceModel {
   constructor(
     id: number,
     locale: string,
-    event: Date,
+    dateEvent: Date,
     theme: string,
     amountPeoples: number,
     imageURL: string,
