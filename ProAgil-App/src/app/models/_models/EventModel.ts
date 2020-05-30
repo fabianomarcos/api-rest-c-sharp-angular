@@ -12,7 +12,7 @@ export class EventModel {
   phone: string;
   email: string;
 
-  lots: LotModel[];
-  socialNetworks: SocialNetwork[];
-  eventSpeakers: Speaker[];
+  lots?: LotModel[];
+  socialNetworks?: SocialNetwork[];
+  eventSpeakers?: Speaker[];
 }

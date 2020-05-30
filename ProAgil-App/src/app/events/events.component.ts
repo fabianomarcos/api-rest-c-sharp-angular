@@ -1,8 +1,6 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { EventModel } from '../models/_models/EventModel';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale, ptBrLocale } from 'ngx-bootstrap/chronos';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
@@ -15,11 +13,12 @@ defineLocale('pt-br', ptBrLocale);
 })
 export class EventsComponent implements OnInit {
   events: EventModel[];
+  event: EventModel;
+  save = 'post';
   eventsFiltered: EventModel[];
   imageHeight = 50;
   imageMargim = 2;
   showImage = false;
-  modalRef: BsModalRef;
   registerForm: FormGroup;
 
   listFiltrared: string;
@@ -27,10 +26,14 @@ export class EventsComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private formBuilder: FormBuilder,
-    private localeService: BsLocaleService,
-    private modalService: BsModalService
+    private localeService: BsLocaleService
   ) {
     this.localeService.use('pt-br');
+  }
+
+  ngOnInit() {
+    this.getEvents();
+    this.validation();
   }
 
   get filterList(): string {
@@ -44,11 +47,6 @@ export class EventsComponent implements OnInit {
       : this.events;
   }
 
-  ngOnInit() {
-    this.getEvents();
-    this.validation();
-  }
-
   filterEvents(name: string): EventModel[] {
     name = name.toLowerCase();
     return this.events.filter(
@@ -60,7 +58,22 @@ export class EventsComponent implements OnInit {
     this.showImage = !this.showImage;
   }
 
-  saveForm() {}
+  getEvents() {
+    this.eventService.getAllResources().subscribe(
+      (events: EventModel[]) => {
+        this.events = events;
+        this.eventsFiltered = this.events;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  openModal(template: any) {
+    this.registerForm.reset();
+    template.show();
+  }
 
   validation() {
     this.registerForm = this.formBuilder.group({
@@ -81,19 +94,47 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  getEvents() {
-    this.eventService.getAllResources().subscribe(
-      (events: EventModel[]) => {
-        this.events = events;
-        this.eventsFiltered = this.events;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  newEvent(template: any) {
+    this.save = 'post';
+    this.openModal(template);
   }
 
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+  updateEvent(event: EventModel, template: any) {
+    this.save = 'put';
+    this.openModal(template);
+    this.event = event;
+    this.registerForm.patchValue(event);
+    this.event = Object.assign({ id: this.event.id }, this.registerForm.value);
+  }
+
+  saveForm(template: any) {
+    if (this.registerForm.valid) {
+      if (this.save === 'post') {
+        this.event = Object.assign({}, this.registerForm.value);
+        this.eventService.create(this.event).subscribe(
+          () => {
+            template.hide();
+            this.getEvents();
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      } else {
+        this.event = Object.assign(
+          { id: this.event.id },
+          this.registerForm.value
+        );
+        this.eventService.update(this.event).subscribe(
+          () => {
+            template.hide();
+            this.getEvents();
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      }
+    }
   }
 }
