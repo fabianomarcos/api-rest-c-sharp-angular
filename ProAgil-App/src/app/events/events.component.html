@@ -53,10 +53,10 @@
       </td>
       <td>
         <div class="btn-group">
-          <button class="btn btn-sm btn-success" tooltip="Editar" (click)="updateEvent(event, template)">
+          <button class="btn btn-sm btn-success" tooltip="Editar" (click)="setUpdateEventInModal(event, template)">
             <em class="fa fa-edit"></em>
           </button>
-          <button class="btn btn-sm btn-danger" tooltip="Excluir">
+          <button class="btn btn-sm btn-danger" (click)="setDeleteEventInModal(event, confirm)" tooltip="Excluir">
             <em class="fa fa-eraser"></em>
           </button>
         </div>
@@ -224,6 +224,31 @@
         </button>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Deletando Evento</h4>
+        <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>{{bodyDeleteEvent}}</p>
+      </div>
+      <div class="modal-footer btn-group d-flex">
+        <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+          CANCELAR
+        </button>
+        <button type="button" class="btn btn-outline-danger" (click)="deleteEvent(confirm)">
+          DELETAR
+        </button>
+      </div>
     </div>
   </div>
 </div>

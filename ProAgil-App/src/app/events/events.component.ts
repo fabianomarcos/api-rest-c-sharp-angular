@@ -14,13 +14,13 @@ defineLocale('pt-br', ptBrLocale);
 export class EventsComponent implements OnInit {
   events: EventModel[];
   event: EventModel;
-  save = 'post';
+  crud = 'postEvent';
   eventsFiltered: EventModel[];
   imageHeight = 50;
   imageMargim = 2;
   showImage = false;
   registerForm: FormGroup;
-
+  bodyDeleteEvent = '';
   listFiltrared: string;
 
   constructor(
@@ -95,45 +95,67 @@ export class EventsComponent implements OnInit {
   }
 
   newEvent(template: any) {
-    this.save = 'post';
+    this.crud = 'post';
     this.openModal(template);
   }
 
-  updateEvent(event: EventModel, template: any) {
-    this.save = 'put';
+  setUpdateEventInModal(event: EventModel, template: any) {
+    this.crud = 'update';
     this.openModal(template);
     this.event = event;
     this.registerForm.patchValue(event);
+  }
+
+  setDeleteEventInModal(event: EventModel, template: any) {
+    this.openModal(template);
+    this.event = event;
+    this.bodyDeleteEvent = `Tem certeza que deseja excluir o Evento: ${event.theme}`;
+  }
+
+  createEvent(template: any) {
+    this.event = Object.assign({}, this.registerForm.value);
+    this.eventService.create(this.event).subscribe(
+      () => {
+        template.hide();
+        this.getEvents();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  updateEvent(template: any) {
     this.event = Object.assign({ id: this.event.id }, this.registerForm.value);
+    this.eventService.update(this.event).subscribe(
+      () => {
+        template.hide();
+        this.getEvents();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
+
+  deleteEvent(template: any) {
+    this.eventService.delete(this.event.id).subscribe(
+      () => {
+        template.hide();
+        this.getEvents();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   saveForm(template: any) {
     if (this.registerForm.valid) {
-      if (this.save === 'post') {
-        this.event = Object.assign({}, this.registerForm.value);
-        this.eventService.create(this.event).subscribe(
-          () => {
-            template.hide();
-            this.getEvents();
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+      if (this.crud === 'post') {
+        this.createEvent(template);
       } else {
-        this.event = Object.assign(
-          { id: this.event.id },
-          this.registerForm.value
-        );
-        this.eventService.update(this.event).subscribe(
-          () => {
-            template.hide();
-            this.getEvents();
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+        this.updateEvent(template);
       }
     }
   }
