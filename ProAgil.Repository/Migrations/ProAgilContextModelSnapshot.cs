@@ -21,7 +21,7 @@ namespace ProAgil.Repository.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AmountPeoples");
+                    b.Property<int>("amountPeople");
 
                     b.Property<DateTime>("DateEvent");
 

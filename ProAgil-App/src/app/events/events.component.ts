@@ -88,7 +88,7 @@ export class EventsComponent implements OnInit {
       locale: ['', Validators.required],
       dateEvent: ['', Validators.required],
       imageUrl: ['', Validators.required],
-      amountPeoples: ['', [Validators.required, Validators.max(1000)]],
+      amountPeople: ['', [Validators.required, Validators.max(1000)]],
       phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
     });

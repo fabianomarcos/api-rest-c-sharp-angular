@@ -9,7 +9,7 @@ namespace ProAgil.Domain
         public string Locale { get; set; }
         public DateTime DateEvent { get; set; }
         public string Theme { get; set; }
-        public int AmountPeoples { get; set; }
+        public int amountPeople { get; set; }
         public string ImageUrl { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }

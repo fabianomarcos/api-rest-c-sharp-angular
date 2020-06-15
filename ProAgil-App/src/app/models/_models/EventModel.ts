@@ -7,8 +7,8 @@ export class EventModel {
   locale: string;
   dateEvent: Date;
   theme: string;
-  amountPeoples: number;
-  imageURL: string;
+  amountPeople: number;
+  imageUrl: string;
   phone: string;
   email: string;
 
