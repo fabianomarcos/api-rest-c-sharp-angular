@@ -1,8 +1,11 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProAgil.Domain;
 using ProAgil.Repository;
+using ProAgil.WebAPI.DTOs;
 
 namespace ProAgil.WebAPI.Controllers
 {
@@ -12,10 +15,16 @@ namespace ProAgil.WebAPI.Controllers
     {
         private readonly IEventRepository _repository;
         private readonly IProAgilRepository _repositoryBase;
-        public EventController(IEventRepository repository, IProAgilRepository repositoryBase)
+        private readonly IMapper _mapper;
+        public EventController(
+            IEventRepository repository,
+            IProAgilRepository repositoryBase,
+            IMapper mapper
+        )
         {
             _repository = repository;
             _repositoryBase = repositoryBase;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -23,7 +32,10 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var results = await _repository.GetAllEventsAsync(true);
+                Event[] events = await _repository.GetAllEventsAsync(true);
+
+                IEnumerable<EventDto> results = _mapper.Map<IEnumerable<EventDto>>(events);
+                
                 return Ok(results);
             }
             catch (System.Exception)
@@ -37,8 +49,11 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var results = await _repository.GetEventAsyncById(EventId, true);
-                return Ok(results);
+                Event result = await _repository.GetEventAsyncById(EventId, true);
+
+                EventDto resultEvent = _mapper.Map<EventDto>(result);
+
+                return Ok(resultEvent);
             }
             catch (System.Exception)
             {
