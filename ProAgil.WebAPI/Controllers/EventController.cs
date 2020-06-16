@@ -34,13 +34,13 @@ namespace ProAgil.WebAPI.Controllers
             {
                 Event[] events = await _repository.GetAllEventsAsync(true);
 
-                IEnumerable<EventDto> results = _mapper.Map<IEnumerable<EventDto>>(events);
+                IEnumerable<EventDto> results = _mapper.Map<EventDto[]>(events);
                 
                 return Ok(results);
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Falha no banco de dados!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Falha no banco de dados! {ex.Message}");
             }
         }
 
@@ -66,7 +66,10 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                var results = await _repository.GetAllEventsAsyncByThema(theme, true);
+                Event[] eventTheme = await _repository.GetAllEventsAsyncByThema(theme, true);
+
+                IEnumerable<EventDto> results = _mapper.Map<EventDto[]>(eventTheme);
+
                 return Ok(results);
             }
             catch (System.Exception)
@@ -76,15 +79,17 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Event eventModel)
+        public async Task<IActionResult> Post(EventDto eventModel)
         {
             try
             {
-                _repositoryBase.Add(eventModel);
+                Event newEvent = _mapper.Map<Event>(eventModel);
+                
+                _repositoryBase.Add(newEvent);
 
                 if (await _repositoryBase.SaveChangesAsync())
                 {
-                    return Created($"/event/{eventModel.Id}", eventModel);
+                    return Created($"/event/{eventModel.Id}", _mapper.Map<EventDto>(newEvent));
                 }
             }
             catch (System.Exception)
@@ -95,19 +100,21 @@ namespace ProAgil.WebAPI.Controllers
         }
 
         [HttpPut("{EventId}")]
-        public async Task<IActionResult> Put(int EventId, Event eventModel)
+        public async Task<IActionResult> Put(int EventId, EventDto eventModel)
         {
             try
             {
-                var response = await _repository.GetEventAsyncById(EventId, false);
+                Event eventEdited = await _repository.GetEventAsyncById(EventId, false);
 
-                if (response == null) return NotFound();
+                if (eventEdited == null) return NotFound();
 
-                _repositoryBase.Update(eventModel);
+                _mapper.Map(eventModel, eventEdited);
+
+                _repositoryBase.Update(eventEdited);
 
                 if (await _repositoryBase.SaveChangesAsync())
                 {
-                    return Created($"/event/{eventModel.Id}", eventModel);
+                    return Created($"/event/{eventModel.Id}", _mapper.Map<EventDto>(eventEdited));
                 }
             }
             catch (System.Exception)
