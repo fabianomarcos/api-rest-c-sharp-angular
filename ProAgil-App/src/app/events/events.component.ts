@@ -17,11 +17,11 @@ export class EventsComponent implements OnInit {
   crud = 'postEvent';
   eventsFiltered: EventModel[];
   imageHeight = 50;
-  imageMargim = 2;
+  imageMargin = 2;
   showImage = false;
   registerForm: FormGroup;
   bodyDeleteEvent = '';
-  listFiltrared: string;
+  listFiltrated: string;
 
   constructor(
     private eventService: EventService,
@@ -37,11 +37,11 @@ export class EventsComponent implements OnInit {
   }
 
   get filterList(): string {
-    return this.listFiltrared;
+    return this.listFiltrated;
   }
 
   set filterList(value: string) {
-    this.listFiltrared = value;
+    this.listFiltrated = value;
     this.eventsFiltered = this.filterList
       ? this.filterEvents(this.filterList)
       : this.events;
@@ -107,7 +107,7 @@ export class EventsComponent implements OnInit {
   }
 
   setDeleteEventInModal(event: EventModel, template: any) {
-    this.openModal(template);
+    template.show();
     this.event = event;
     this.bodyDeleteEvent = `Tem certeza que deseja excluir o Evento: ${event.theme}`;
   }

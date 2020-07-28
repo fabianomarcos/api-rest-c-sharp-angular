@@ -32,12 +32,12 @@
       <th>Opções</th>
     </tr>
   </thead>
-  <tbody *ngIf="events && events.length">
+  <tbody *ngIf="events">
     <tr *ngFor="let event of eventsFiltered">
       <td>
         <img src='/ProAgil-App/src/assets/{{event.imageUrl}}'
-          [style.widht.px]="imageHeight"
-          [style.margin.px]="imageMargim" />
+          [style.width.px]="imageHeight"
+          [style.margin.px]="imageMargin" />
       </td>
       <td>{{ event.id }}</td>
       <td>{{ event.theme }}</td>
@@ -57,7 +57,7 @@
           <button class="btn btn-sm btn-success" tooltip="Editar" (click)="setUpdateEventInModal(event, template)">
             <em class="fa fa-edit"></em>
           </button>
-          <button class="btn btn-sm btn-danger" (click)="setDeleteEventInModal(event, confirm)" tooltip="Excluir">
+          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="setDeleteEventInModal(event, confirm)">
             <em class="fa fa-eraser"></em>
           </button>
         </div>
@@ -77,7 +77,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Large modal</h4>
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Dados do Evento</h4>
         <button type="button" class="close pull-right" (click)="template.hide()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

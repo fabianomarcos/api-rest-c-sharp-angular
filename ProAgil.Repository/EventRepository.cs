@@ -32,7 +32,7 @@ namespace ProAgil.Repository
             return await query.ToArrayAsync();
         }
 
-        public async Task<Event[]> GetAllEventsAsyncByThema(string theme, bool includeSpeakers)
+        public async Task<Event[]> GetAllEventsAsyncByTheme(string theme, bool includeSpeakers)
         {
             IQueryable<Event> query = _context.Events
                 .Include(c => c.Lots)
