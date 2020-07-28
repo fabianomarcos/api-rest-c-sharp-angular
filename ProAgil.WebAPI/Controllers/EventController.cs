@@ -35,7 +35,7 @@ namespace ProAgil.WebAPI.Controllers
                 Event[] events = await _repository.GetAllEventsAsync(true);
 
                 IEnumerable<EventDto> results = _mapper.Map<EventDto[]>(events);
-                
+
                 return Ok(results);
             }
             catch (System.Exception ex)
@@ -66,7 +66,7 @@ namespace ProAgil.WebAPI.Controllers
         {
             try
             {
-                Event[] eventTheme = await _repository.GetAllEventsAsyncByThema(theme, true);
+                Event[] eventTheme = await _repository.GetAllEventsAsyncByTheme(theme, true);
 
                 IEnumerable<EventDto> results = _mapper.Map<EventDto[]>(eventTheme);
 
@@ -84,7 +84,7 @@ namespace ProAgil.WebAPI.Controllers
             try
             {
                 Event newEvent = _mapper.Map<Event>(eventModel);
-                
+
                 _repositoryBase.Add(newEvent);
 
                 if (await _repositoryBase.SaveChangesAsync())
