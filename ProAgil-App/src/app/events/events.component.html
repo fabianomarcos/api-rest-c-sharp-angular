@@ -1,9 +1,10 @@
+<app-title></app-title>
 <div class="d-flex">
   <div class="form-inline mr-auto">
     <div class="form-group mb-2">
       <label class="mr-2">Filtro por Tema:</label>
-      <input type="text" class="form-control mr-2" placeholder="buscar" [(ngModel)]="filterList" />
-      <button class="btn btn-outline-success">
+      <input #search type="text" class="form-control mr-2" placeholder="buscar"/>
+      <button class="btn btn-outline-success" (click)="filterEvents()">
         Buscar
       </button>
     </div>
@@ -18,9 +19,9 @@
 <table class="table table-striped">
   <thead class="tread-dark">
     <tr>
-      <th>
+      <th class="eye" >
         <button (click)="setShowImage()" class="btn btn-outline-default">
-          <em class="{{ showImage ? 'fa fa-eye-slash' : 'fa fa-eye' }}"></em>
+          <em class="{{ showImage ? 'fa fa-eye' : 'fa fa-eye-slash' }}"></em>
         </button>
       </th>
       <th>#</th>
@@ -32,17 +33,15 @@
       <th>Opções</th>
     </tr>
   </thead>
-  <tbody *ngIf="events">
-    <tr *ngFor="let event of eventsFiltered">
-      <td>
-        <img src='/ProAgil-App/src/assets/{{event.imageUrl}}'
-          [style.width.px]="imageHeight"
-          [style.margin.px]="imageMargin" />
+  <tbody *ngIf="showEvents && events.length > 0">
+    <tr *ngFor="let event of events">
+      <td class="image">
+        <img *ngIf="showImage" src='./assets/{{event.imageUrl}}.jpg' />
       </td>
       <td>{{ event.id }}</td>
       <td>{{ event.theme }}</td>
       <td>{{ event.locale }}</td>
-      <td>{{ event.dateEvent | DateTimeFormat }}</td>
+      <td>{{ event.dateEvent }}</td>
       <td>{{ event.amountPeople }}</td>
       <td>
         <div *ngIf="!event.lots.length">
@@ -129,15 +128,18 @@
 
             <div class="form-group col-md-4">
               <label>Data e Hora</label>
-              <input type="text" bsDatepicker [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm a' }" [ngClass]="{
-                'is-invalid':
+              <input type="text" class="form-control"
+                bsDatepicker
+                [bsConfig]="{ dateInputFormat : 'DD/MM/YYYY hh:mm' }"
+                [ngClass]="{'is-invalid':
                   registerForm.get('dateEvent').errors &&
                   registerForm.get('dateEvent').touched
-              }" class="form-control" formControlName="dateEvent" />
+                }"
+                formControlName="dateEvent" placeholder="" />
               <div *ngIf="
                 registerForm.get('dateEvent').hasError('required') &&
-                registerForm.get('dateEvent').touched
-              " class="invalid-feedback">
+                registerForm.get('dateEvent').touched"
+                class="invalid-feedback">
                 Campo obrigatório!
               </div>
             </div>

@@ -1,0 +1,23 @@
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.table td {
+  height: 65px;
+}
+
+.eye {
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  display: flex;
+    justify-content: center;
+}
+
+.image img {
+  height: 40px;
+  width: 40px;
+  margin: 2px;
+}

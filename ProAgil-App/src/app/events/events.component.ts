@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EventService } from '../services/event.service';
 import { EventModel } from '../models/_models/EventModel';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { defineLocale, ptBrLocale } from 'ngx-bootstrap/chronos';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { ToastrService } from 'ngx-toastr';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -15,17 +16,16 @@ export class EventsComponent implements OnInit {
   events: EventModel[];
   event: EventModel;
   crud = 'postEvent';
-  eventsFiltered: EventModel[];
-  imageHeight = 50;
-  imageMargin = 2;
-  showImage = false;
+  showImage: boolean;
+  showEvents: boolean;
   registerForm: FormGroup;
   bodyDeleteEvent = '';
-  listFiltrated: string;
+  @ViewChild('search') search;
 
   constructor(
     private eventService: EventService,
     private formBuilder: FormBuilder,
+    private toastr: ToastrService,
     private localeService: BsLocaleService
   ) {
     this.localeService.use('pt-br');
@@ -36,22 +36,19 @@ export class EventsComponent implements OnInit {
     this.validation();
   }
 
-  get filterList(): string {
-    return this.listFiltrated;
-  }
+  filterEvents() {
+    const valueInput = this.search.nativeElement.value.toLowerCase();
+    if (!valueInput) {
+      return this.getEvents();
+    }
 
-  set filterList(value: string) {
-    this.listFiltrated = value;
-    this.eventsFiltered = this.filterList
-      ? this.filterEvents(this.filterList)
-      : this.events;
-  }
-
-  filterEvents(name: string): EventModel[] {
-    name = name.toLowerCase();
-    return this.events.filter(
-      (event) => event.theme.toLowerCase().indexOf(name) !== -1
+    const eventsFiltered = this.events.filter(
+      (eventFiltered) => eventFiltered.theme.toLowerCase().includes(valueInput)
     );
+
+    this.showEvents = true;
+
+    return this.events = eventsFiltered;
   }
 
   setShowImage() {
@@ -62,10 +59,10 @@ export class EventsComponent implements OnInit {
     this.eventService.getAllResources().subscribe(
       (events: EventModel[]) => {
         this.events = events;
-        this.eventsFiltered = this.events;
+        this.showEvents = true;
       },
       (error) => {
-        console.log(error);
+        this.toastr.error('Não foi possível carregar os eventos');
       }
     );
   }
@@ -118,9 +115,10 @@ export class EventsComponent implements OnInit {
       () => {
         template.hide();
         this.getEvents();
+        this.toastr.success('Evento inserido com sucesso');
       },
       (error) => {
-        console.error(error);
+        this.toastr.error('Erro ao tentar inserir evento');
       }
     );
   }
@@ -131,9 +129,10 @@ export class EventsComponent implements OnInit {
       () => {
         template.hide();
         this.getEvents();
+        this.toastr.success('Evento alterado com sucesso');
       },
       (error) => {
-        console.error(error);
+        this.toastr.error('Erro ao tentar alterar evento');
       }
     );
   }
@@ -143,20 +142,19 @@ export class EventsComponent implements OnInit {
       () => {
         template.hide();
         this.getEvents();
+        this.toastr.success('Evento deletado com sucesso');
       },
       (error) => {
-        console.error(error);
+        this.toastr.error('Não foi possível deletar o evento');
       }
     );
   }
 
   saveForm(template: any) {
     if (this.registerForm.valid) {
-      if (this.crud === 'post') {
-        this.createEvent(template);
-      } else {
-        this.updateEvent(template);
-      }
+      this.crud === 'post'
+        ? this.createEvent(template)
+        : this.updateEvent(template);
     }
   }
 }
